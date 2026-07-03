@@ -1,34 +1,34 @@
 {
-  "name": "Proyecto Completo",
-  "description": "Proyecto con todas las integraciones configuradas",
-  "emailNotifications": {
-    "enabled": true,
-    "smtpHost": "smtp.gmail.com",
-    "smtpPort": 587,
-    "smtpUser": "your-email@gmail.com",
-    "smtpPassword": "your-app-password",
-    "from": "Control Panel <noreply@example.com>",
-    "recipients": [
-      "dev-team@example.com",
-      "ops-team@example.com"
-    ]
-  },
-  "notionNotifications": {
-    "enabled": true,
-    "integrationToken": "secret_abc123def456...",
-    "databaseId": "abc123def456...",
-    "propertyMappings": {
-      "title": "Name",
-      "description": "Description",
-      "priority": "Priority",
-      "status": "Status",
-      "assignee": "Assigned to"
+    "name": "Proyecto Completo",
+    "description": "Proyecto con todas las integraciones configuradas",
+    "emailNotifications": {
+        "enabled": true,
+        "smtpHost": "smtp.gmail.com",
+        "smtpPort": 587,
+        "smtpUser": "your-email@gmail.com",
+        "smtpPassword": "your-app-password",
+        "from": "Control Panel <noreply@example.com>",
+        "recipients": [
+            "dev-team@example.com",
+            "ops-team@example.com"
+        ]
+    },
+    "notionNotifications": {
+        "enabled": true,
+        "integrationToken": "secret_abc123def456...",
+        "databaseId": "abc123def456...",
+        "propertyMappings": {
+            "title": "Name",
+            "description": "Description",
+            "priority": "Priority",
+            "status": "Status",
+            "assignee": "Assigned to"
+        }
+    },
+    "portainerConfig": {
+        "enabled": true,
+        "apiUrl": "https://portainer.example.com",
+        "apiToken": "ptr_abc123def456...",
+        "endpointId": 1
     }
-  },
-  "portainerConfig": {
-    "enabled": true,
-    "apiUrl": "https://portainer.example.com",
-    "apiToken": "ptr_abc123def456...",
-    "endpointId": 1
-  }
 }

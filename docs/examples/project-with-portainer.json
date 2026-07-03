@@ -1,16 +1,16 @@
 {
-  "name": "Proyecto con Portainer",
-  "description": "Proyecto configurado para gestión de stacks Docker vía Portainer",
-  "emailNotifications": {
-    "enabled": false
-  },
-  "notionNotifications": {
-    "enabled": false
-  },
-  "portainerConfig": {
-    "enabled": true,
-    "apiUrl": "https://portainer.example.com",
-    "apiToken": "ptr_abc123def456...",
-    "endpointId": 1
-  }
+    "name": "Proyecto con Portainer",
+    "description": "Proyecto configurado para gestión de stacks Docker vía Portainer",
+    "emailNotifications": {
+        "enabled": false
+    },
+    "notionNotifications": {
+        "enabled": false
+    },
+    "portainerConfig": {
+        "enabled": true,
+        "apiUrl": "https://portainer.example.com",
+        "apiToken": "ptr_abc123def456...",
+        "endpointId": 1
+    }
 }

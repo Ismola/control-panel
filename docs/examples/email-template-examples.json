@@ -1,48 +1,48 @@
 [
-  {
-    "name": "Critical Service Failure",
-    "subject": "🔴 CRITICAL: {{serviceName}} is down",
-    "htmlTemplate": "<!DOCTYPE html><html><head><style>body{font-family:Arial,sans-serif;line-height:1.6;color:#333}. header{background:#d32f2f;color:#fff;padding:20px;text-align:center}.content{padding:20px}.alert{background:#ffebee;border-left:4px solid #d32f2f;padding:15px;margin:20px 0}.footer{background:#f5f5f5;padding:15px;text-align:center;font-size:12px;color:#666}</style></head><body><div class=\"header\"><h1>🔴 Service Failure Alert</h1></div><div class=\"content\"><div class=\"alert\"><h2>{{serviceName}} has failed</h2><p><strong>Error:</strong> {{error}}</p><p><strong>Timestamp:</strong> {{timestamp}}</p><p><strong>Severity:</strong> {{severity}}</p>{{#if metadata.url}}<p><strong>URL:</strong> {{metadata.url}}</p>{{/if}}{{#if metadata.consecutiveFailures}}<p><strong>Consecutive Failures:</strong> {{metadata.consecutiveFailures}}</p>{{/if}}</div><p>Please investigate this issue immediately.</p></div><div class=\"footer\"><p>This is an automated message from Control Panel</p><p>Do not reply to this email</p></div></body></html>",
-    "textTemplate": "CRITICAL SERVICE FAILURE\n\nService: {{serviceName}}\nError: {{error}}\nTimestamp: {{timestamp}}\nSeverity: {{severity}}\n\n{{#if metadata.url}}URL: {{metadata.url}}\n{{/if}}{{#if metadata.consecutiveFailures}}Consecutive Failures: {{metadata.consecutiveFailures}}\n{{/if}}\nPlease investigate this issue immediately.\n\n---\nThis is an automated message from Control Panel",
-    "variables": {
-      "serviceName": "API Service",
-      "error": "Connection timeout",
-      "timestamp": "2026-07-03T10:00:00Z",
-      "severity": "critical"
+    {
+        "name": "Critical Service Failure",
+        "subject": "🔴 CRITICAL: {{serviceName}} is down",
+        "htmlTemplate": "<!DOCTYPE html><html><head><style>body{font-family:Arial,sans-serif;line-height:1.6;color:#333}. header{background:#d32f2f;color:#fff;padding:20px;text-align:center}.content{padding:20px}.alert{background:#ffebee;border-left:4px solid #d32f2f;padding:15px;margin:20px 0}.footer{background:#f5f5f5;padding:15px;text-align:center;font-size:12px;color:#666}</style></head><body><div class=\"header\"><h1>🔴 Service Failure Alert</h1></div><div class=\"content\"><div class=\"alert\"><h2>{{serviceName}} has failed</h2><p><strong>Error:</strong> {{error}}</p><p><strong>Timestamp:</strong> {{timestamp}}</p><p><strong>Severity:</strong> {{severity}}</p>{{#if metadata.url}}<p><strong>URL:</strong> {{metadata.url}}</p>{{/if}}{{#if metadata.consecutiveFailures}}<p><strong>Consecutive Failures:</strong> {{metadata.consecutiveFailures}}</p>{{/if}}</div><p>Please investigate this issue immediately.</p></div><div class=\"footer\"><p>This is an automated message from Control Panel</p><p>Do not reply to this email</p></div></body></html>",
+        "textTemplate": "CRITICAL SERVICE FAILURE\n\nService: {{serviceName}}\nError: {{error}}\nTimestamp: {{timestamp}}\nSeverity: {{severity}}\n\n{{#if metadata.url}}URL: {{metadata.url}}\n{{/if}}{{#if metadata.consecutiveFailures}}Consecutive Failures: {{metadata.consecutiveFailures}}\n{{/if}}\nPlease investigate this issue immediately.\n\n---\nThis is an automated message from Control Panel",
+        "variables": {
+            "serviceName": "API Service",
+            "error": "Connection timeout",
+            "timestamp": "2026-07-03T10:00:00Z",
+            "severity": "critical"
+        },
+        "description": "Template para fallos críticos con formato urgente"
     },
-    "description": "Template para fallos críticos con formato urgente"
-  },
-  {
-    "name": "Warning Alert",
-    "subject": "⚠️ WARNING: {{serviceName}} - {{error}}",
-    "htmlTemplate": "<!DOCTYPE html><html><head><style>body{font-family:Arial,sans-serif;line-height:1.6;color:#333}.header{background:#ff9800;color:#fff;padding:20px;text-align:center}.content{padding:20px}.warning{background:#fff3e0;border-left:4px solid #ff9800;padding:15px;margin:20px 0}.footer{background:#f5f5f5;padding:15px;text-align:center;font-size:12px;color:#666}</style></head><body><div class=\"header\"><h1>⚠️ Service Warning</h1></div><div class=\"content\"><div class=\"warning\"><h2>{{serviceName}}</h2><p><strong>Issue:</strong> {{error}}</p><p><strong>Time:</strong> {{timestamp}}</p></div><p>This is a warning alert. The service may still be operational but requires attention.</p></div><div class=\"footer\"><p>Control Panel Monitoring System</p></div></body></html>",
-    "textTemplate": "WARNING ALERT\n\nService: {{serviceName}}\nIssue: {{error}}\nTime: {{timestamp}}\n\nThis is a warning alert. The service may still be operational but requires attention.\n\n---\nControl Panel Monitoring System",
-    "variables": {
-      "serviceName": "Database",
-      "error": "High response time detected",
-      "timestamp": "2026-07-03T10:00:00Z"
+    {
+        "name": "Warning Alert",
+        "subject": "⚠️ WARNING: {{serviceName}} - {{error}}",
+        "htmlTemplate": "<!DOCTYPE html><html><head><style>body{font-family:Arial,sans-serif;line-height:1.6;color:#333}.header{background:#ff9800;color:#fff;padding:20px;text-align:center}.content{padding:20px}.warning{background:#fff3e0;border-left:4px solid #ff9800;padding:15px;margin:20px 0}.footer{background:#f5f5f5;padding:15px;text-align:center;font-size:12px;color:#666}</style></head><body><div class=\"header\"><h1>⚠️ Service Warning</h1></div><div class=\"content\"><div class=\"warning\"><h2>{{serviceName}}</h2><p><strong>Issue:</strong> {{error}}</p><p><strong>Time:</strong> {{timestamp}}</p></div><p>This is a warning alert. The service may still be operational but requires attention.</p></div><div class=\"footer\"><p>Control Panel Monitoring System</p></div></body></html>",
+        "textTemplate": "WARNING ALERT\n\nService: {{serviceName}}\nIssue: {{error}}\nTime: {{timestamp}}\n\nThis is a warning alert. The service may still be operational but requires attention.\n\n---\nControl Panel Monitoring System",
+        "variables": {
+            "serviceName": "Database",
+            "error": "High response time detected",
+            "timestamp": "2026-07-03T10:00:00Z"
+        },
+        "description": "Template para warnings menos urgentes"
     },
-    "description": "Template para warnings menos urgentes"
-  },
-  {
-    "name": "Service Recovered",
-    "subject": "✅ RESOLVED: {{serviceName}} is back online",
-    "htmlTemplate": "<!DOCTYPE html><html><head><style>body{font-family:Arial,sans-serif;line-height:1.6;color:#333}.header{background:#4caf50;color:#fff;padding:20px;text-align:center}.content{padding:20px}.success{background:#e8f5e9;border-left:4px solid #4caf50;padding:15px;margin:20px 0}.footer{background:#f5f5f5;padding:15px;text-align:center;font-size:12px;color:#666}</style></head><body><div class=\"header\"><h1>✅ Service Recovered</h1></div><div class=\"content\"><div class=\"success\"><h2>{{serviceName}} is back online</h2><p><strong>Recovered at:</strong> {{timestamp}}</p>{{#if metadata.downtime}}<p><strong>Total downtime:</strong> {{metadata.downtime}}</p>{{/if}}</div><p>The service has recovered and is now functioning normally.</p></div><div class=\"footer\"><p>Control Panel Monitoring System</p></div></body></html>",
-    "textTemplate": "SERVICE RECOVERED\n\nService: {{serviceName}}\nRecovered at: {{timestamp}}\n{{#if metadata.downtime}}Total downtime: {{metadata.downtime}}\n{{/if}}\nThe service has recovered and is now functioning normally.\n\n---\nControl Panel Monitoring System",
-    "variables": {
-      "serviceName": "API Service",
-      "timestamp": "2026-07-03T10:15:00Z"
+    {
+        "name": "Service Recovered",
+        "subject": "✅ RESOLVED: {{serviceName}} is back online",
+        "htmlTemplate": "<!DOCTYPE html><html><head><style>body{font-family:Arial,sans-serif;line-height:1.6;color:#333}.header{background:#4caf50;color:#fff;padding:20px;text-align:center}.content{padding:20px}.success{background:#e8f5e9;border-left:4px solid #4caf50;padding:15px;margin:20px 0}.footer{background:#f5f5f5;padding:15px;text-align:center;font-size:12px;color:#666}</style></head><body><div class=\"header\"><h1>✅ Service Recovered</h1></div><div class=\"content\"><div class=\"success\"><h2>{{serviceName}} is back online</h2><p><strong>Recovered at:</strong> {{timestamp}}</p>{{#if metadata.downtime}}<p><strong>Total downtime:</strong> {{metadata.downtime}}</p>{{/if}}</div><p>The service has recovered and is now functioning normally.</p></div><div class=\"footer\"><p>Control Panel Monitoring System</p></div></body></html>",
+        "textTemplate": "SERVICE RECOVERED\n\nService: {{serviceName}}\nRecovered at: {{timestamp}}\n{{#if metadata.downtime}}Total downtime: {{metadata.downtime}}\n{{/if}}\nThe service has recovered and is now functioning normally.\n\n---\nControl Panel Monitoring System",
+        "variables": {
+            "serviceName": "API Service",
+            "timestamp": "2026-07-03T10:15:00Z"
+        },
+        "description": "Template para notificar cuando un servicio se recupera"
     },
-    "description": "Template para notificar cuando un servicio se recupera"
-  },
-  {
-    "name": "Daily Summary",
-    "subject": "📊 Daily Monitoring Summary - {{date}}",
-    "htmlTemplate": "<!DOCTYPE html><html><head><style>body{font-family:Arial,sans-serif;line-height:1.6;color:#333}.header{background:#2196f3;color:#fff;padding:20px;text-align:center}.content{padding:20px}.stats{display:flex;justify-content:space-around;margin:20px 0}.stat-box{background:#e3f2fd;padding:15px;border-radius:5px;text-align:center;flex:1;margin:0 10px}.stat-number{font-size:32px;font-weight:bold;color:#1976d2}.footer{background:#f5f5f5;padding:15px;text-align:center;font-size:12px;color:#666}</style></head><body><div class=\"header\"><h1>📊 Daily Monitoring Summary</h1><p>{{date}}</p></div><div class=\"content\"><div class=\"stats\"><div class=\"stat-box\"><div class=\"stat-number\">{{metadata.totalChecks}}</div><div>Total Checks</div></div><div class=\"stat-box\"><div class=\"stat-number\" style=\"color:#4caf50\">{{metadata.successful}}</div><div>Successful</div></div><div class=\"stat-box\"><div class=\"stat-number\" style=\"color:#f44336\">{{metadata.failed}}</div><div>Failed</div></div></div><h2>Summary</h2><p>Uptime: {{metadata.uptime}}%</p><p>All systems operational: {{metadata.allHealthy}}</p></div><div class=\"footer\"><p>Control Panel Monitoring System</p></div></body></html>",
-    "textTemplate": "DAILY MONITORING SUMMARY\nDate: {{date}}\n\nTotal Checks: {{metadata.totalChecks}}\nSuccessful: {{metadata.successful}}\nFailed: {{metadata.failed}}\nUptime: {{metadata.uptime}}%\nAll systems operational: {{metadata.allHealthy}}\n\n---\nControl Panel Monitoring System",
-    "variables": {
-      "date": "2026-07-03"
-    },
-    "description": "Template para resumen diario de monitoreo"
-  }
+    {
+        "name": "Daily Summary",
+        "subject": "📊 Daily Monitoring Summary - {{date}}",
+        "htmlTemplate": "<!DOCTYPE html><html><head><style>body{font-family:Arial,sans-serif;line-height:1.6;color:#333}.header{background:#2196f3;color:#fff;padding:20px;text-align:center}.content{padding:20px}.stats{display:flex;justify-content:space-around;margin:20px 0}.stat-box{background:#e3f2fd;padding:15px;border-radius:5px;text-align:center;flex:1;margin:0 10px}.stat-number{font-size:32px;font-weight:bold;color:#1976d2}.footer{background:#f5f5f5;padding:15px;text-align:center;font-size:12px;color:#666}</style></head><body><div class=\"header\"><h1>📊 Daily Monitoring Summary</h1><p>{{date}}</p></div><div class=\"content\"><div class=\"stats\"><div class=\"stat-box\"><div class=\"stat-number\">{{metadata.totalChecks}}</div><div>Total Checks</div></div><div class=\"stat-box\"><div class=\"stat-number\" style=\"color:#4caf50\">{{metadata.successful}}</div><div>Successful</div></div><div class=\"stat-box\"><div class=\"stat-number\" style=\"color:#f44336\">{{metadata.failed}}</div><div>Failed</div></div></div><h2>Summary</h2><p>Uptime: {{metadata.uptime}}%</p><p>All systems operational: {{metadata.allHealthy}}</p></div><div class=\"footer\"><p>Control Panel Monitoring System</p></div></body></html>",
+        "textTemplate": "DAILY MONITORING SUMMARY\nDate: {{date}}\n\nTotal Checks: {{metadata.totalChecks}}\nSuccessful: {{metadata.successful}}\nFailed: {{metadata.failed}}\nUptime: {{metadata.uptime}}%\nAll systems operational: {{metadata.allHealthy}}\n\n---\nControl Panel Monitoring System",
+        "variables": {
+            "date": "2026-07-03"
+        },
+        "description": "Template para resumen diario de monitoreo"
+    }
 ]

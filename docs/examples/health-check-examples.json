@@ -1,50 +1,50 @@
 [
-  {
-    "name": "API Health Check - Cada 5 minutos",
-    "url": "https://api.example.com/health",
-    "interval": "*/5 * * * *",
-    "timeout": 5000,
-    "enabled": true,
-    "description": "Verifica que la API esté respondiendo"
-  },
-  {
-    "name": "Database Health - Cada 15 minutos",
-    "url": "https://api.example.com/health/database",
-    "interval": "*/15 * * * *",
-    "timeout": 10000,
-    "enabled": true,
-    "description": "Verifica la conexión a la base de datos"
-  },
-  {
-    "name": "Frontend - Cada hora",
-    "url": "https://example.com",
-    "interval": "0 * * * *",
-    "timeout": 3000,
-    "enabled": true,
-    "description": "Verifica que el frontend esté accesible"
-  },
-  {
-    "name": "Payment Gateway - Cada 10 minutos",
-    "url": "https://payments.example.com/status",
-    "interval": "*/10 * * * *",
-    "timeout": 5000,
-    "enabled": true,
-    "description": "Verifica la pasarela de pagos crítica"
-  },
-  {
-    "name": "Backup Service - Diario",
-    "url": "https://backup.example.com/status",
-    "interval": "0 0 * * *",
-    "timeout": 15000,
-    "enabled": true,
-    "description": "Verifica que el backup se ejecutó correctamente"
-  },
-  {
-    "name": "CDN Status - Cada 30 minutos",
-    "url": "https://cdn.example.com/health",
-    "interval": "*/30 * * * *",
-    "timeout": 3000,
-    "enabled": true,
-    "description": "Monitorea la disponibilidad del CDN"
-  }
+    {
+        "name": "API Health Check - Cada 5 minutos",
+        "url": "https://api.example.com/health",
+        "interval": "*/5 * * * *",
+        "timeout": 5000,
+        "enabled": true,
+        "description": "Verifica que la API esté respondiendo"
+    },
+    {
+        "name": "Database Health - Cada 15 minutos",
+        "url": "https://api.example.com/health/database",
+        "interval": "*/15 * * * *",
+        "timeout": 10000,
+        "enabled": true,
+        "description": "Verifica la conexión a la base de datos"
+    },
+    {
+        "name": "Frontend - Cada hora",
+        "url": "https://example.com",
+        "interval": "0 * * * *",
+        "timeout": 3000,
+        "enabled": true,
+        "description": "Verifica que el frontend esté accesible"
+    },
+    {
+        "name": "Payment Gateway - Cada 10 minutos",
+        "url": "https://payments.example.com/status",
+        "interval": "*/10 * * * *",
+        "timeout": 5000,
+        "enabled": true,
+        "description": "Verifica la pasarela de pagos crítica"
+    },
+    {
+        "name": "Backup Service - Diario",
+        "url": "https://backup.example.com/status",
+        "interval": "0 0 * * *",
+        "timeout": 15000,
+        "enabled": true,
+        "description": "Verifica que el backup se ejecutó correctamente"
+    },
+    {
+        "name": "CDN Status - Cada 30 minutos",
+        "url": "https://cdn.example.com/health",
+        "interval": "*/30 * * * *",
+        "timeout": 3000,
+        "enabled": true,
+        "description": "Monitorea la disponibilidad del CDN"
+    }
 ]
