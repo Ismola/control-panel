@@ -1,0 +1,22 @@
+{
+  "name": "Proyecto con Notion",
+  "description": "Proyecto configurado para crear tareas en Notion cuando hay fallos",
+  "emailNotifications": {
+    "enabled": false
+  },
+  "notionNotifications": {
+    "enabled": true,
+    "integrationToken": "secret_abc123def456...",
+    "databaseId": "abc123def456...",
+    "propertyMappings": {
+      "title": "Name",
+      "description": "Description",
+      "priority": "Priority",
+      "status": "Status",
+      "assignee": "Assigned to"
+    }
+  },
+  "portainerConfig": {
+    "enabled": false
+  }
+}

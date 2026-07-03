@@ -1,0 +1,23 @@
+{
+  "name": "Proyecto con Email",
+  "description": "Proyecto configurado para enviar notificaciones por email usando Gmail",
+  "emailNotifications": {
+    "enabled": true,
+    "smtpHost": "smtp.gmail.com",
+    "smtpPort": 587,
+    "smtpUser": "your-email@gmail.com",
+    "smtpPassword": "your-app-password",
+    "from": "Control Panel <noreply@example.com>",
+    "recipients": [
+      "dev1@example.com",
+      "dev2@example.com",
+      "ops@example.com"
+    ]
+  },
+  "notionNotifications": {
+    "enabled": false
+  },
+  "portainerConfig": {
+    "enabled": false
+  }
+}
