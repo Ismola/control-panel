@@ -2,6 +2,7 @@
 
 Panel de administracion para servicios con React (frontend) y Node.js (backend).
 
+
 Objetivos principales:
 
 - Recibir fallos de servicios via API.
