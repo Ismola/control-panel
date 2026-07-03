@@ -2,7 +2,6 @@
 
 Panel de administracion para servicios con React (frontend) y Node.js (backend).
 
-
 Objetivos principales:
 
 - Recibir fallos de servicios via API.
@@ -97,13 +96,13 @@ cd backend && npm install
 cd ../frontend && npm install
 ```
 
-3. Ejecutar backend:
+1. Ejecutar backend:
 
 ```bash
 cd backend && npm run dev
 ```
 
-4. Ejecutar frontend:
+1. Ejecutar frontend:
 
 ```bash
 cd frontend && npm run dev
