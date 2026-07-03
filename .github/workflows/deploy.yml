@@ -19,7 +19,7 @@ jobs:
   notify-portainer:
     needs: [ci, docker-publish]
     runs-on: ubuntu-latest
-    if: ${{ success() && secrets.PORTAINER_DEPLOY_WEBHOOK != '' }}
+    
     steps:
       - name: Trigger Portainer webhook
         run: curl -f -X POST "${{ secrets.PORTAINER_DEPLOY_WEBHOOK }}"
