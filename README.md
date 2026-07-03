@@ -1,153 +1,359 @@
-# Control Panel
+# Control Panel - Service Monitoring & Management
 
-Panel de administracion para servicios con React (frontend) y Node.js (backend).
+A comprehensive administration panel for monitoring services with automated failure notifications, health checks, and infrastructure management through Portainer integration.
 
-Objetivos principales:
+## 🚀 Features
 
-- Recibir fallos de servicios via API.
-- Enviar emails a desarrolladores por proyecto usando plantilla configurable.
-- Crear tareas en Notion por proyecto (opcional).
-- Operar stacks de Portainer (stats, stop, restart) por proyecto.
-- Ejecutar healthchecks configurables por proyecto y disparar acciones cuando fallan.
-- Desplegar con imagenes publicadas en GHCR (sin `build` en compose de deploy).
+### Core Functionality
+- **📧 Email Notifications**: Automated email alerts via configurable SMTP for service failures
+- **📝 Notion Integration**: Automatic task creation in Notion databases when services fail
+- **💓 Health Checks**: Configurable periodic HTTP/HTTPS health checks with failure detection
+- **🐳 Portainer Integration**: View stats and manage Docker stacks (start/stop/restart)
+- **🔔 Failure Webhook**: API endpoint for services to report failures
+- **📊 Project Management**: Configure multiple projects with individual settings
 
-## Arquitectura
+### Configuration
+- Per-project email templates with variable substitution
+- Customizable developer email lists per project
+- Configurable health check intervals (1min to custom cron)
+- Project-specific Notion task properties mapping
+- Portainer stack linking and management
 
-- `backend`: API Express + MongoDB + integraciones (Email, Notion, Portainer).
-- `frontend`: React + Vite para administracion de proyectos y visibilidad operativa.
-- `compose.yaml`: despliegue usando imagenes GHCR.
-- `compose.dev.yaml`: entorno local incluyendo MongoDB.
+## 🏗️ Architecture
 
-## Estructura
+```
+┌─────────────────┐         ┌──────────────────┐
+│   Services      │────────▶│  Failure Webhook │
+│  (External)     │         │   (Backend API)  │
+└─────────────────┘         └────────┬─────────┘
+                                     │
+                    ┌────────────────┼────────────────┐
+                    ▼                ▼                ▼
+              ┌──────────┐    ┌──────────┐    ┌──────────┐
+              │  Email   │    │  Notion  │    │  Logs    │
+              │  SMTP    │    │   API    │    │ MongoDB  │
+              └──────────┘    └──────────┘    └──────────┘
 
-```text
-.
-├─ backend/
-├─ frontend/
-├─ compose.yaml
-├─ compose.dev.yaml
-├─ infra/compose/
-└─ .github/workflows/
+┌─────────────────┐         ┌──────────────────┐
+│  Health Check   │────────▶│   Monitored      │
+│   Scheduler     │  HTTP   │    Services      │
+└────────┬────────┘         └──────────────────┘
+         │ (on failure)
+         ▼
+   ┌──────────────┐
+   │ Notification │
+   │   System     │
+   └──────────────┘
+
+┌─────────────────┐         ┌──────────────────┐
+│  Admin UI       │────────▶│   Portainer      │
+│  (React)        │  API    │      API         │
+└─────────────────┘         └──────────────────┘
 ```
 
-## Variables de entorno
+### Tech Stack
+- **Backend**: Node.js + Fastify + TypeScript + Mongoose
+- **Frontend**: React + Vite + TypeScript + shadcn/ui + Tailwind CSS
+- **Database**: MongoDB 7
+- **Testing**: Vitest
+- **Deployment**: Docker + Docker Compose
 
-Copiar `.env.example` a `.env` y ajustar valores.
+## 📋 Prerequisites
 
-Variables base:
+- **Docker** and **Docker Compose** (for containerized deployment)
+- **Node.js 22+** (for local development)
+- **MongoDB** (included in docker-compose or external instance)
 
-- `NODE_ENV`: `development|test|production`
-- `PORT`: puerto del backend (default 8080)
-- `MONGODB_URI`: cadena de conexion Mongo
-- `JWT_SECRET`: clave para autenticacion futura
-- `VITE_API_BASE_URL`: URL base del backend para frontend
+## 🚦 Quick Start
 
-## Modelo por proyecto
+### Development (Local)
 
-Cada proyecto guarda su propia configuracion:
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Ismola/control-panel.git
+   cd control-panel
+   ```
 
-- `emailConfig`: SMTP, remitente, destinatarios, plantilla asunto/cuerpo.
-- `notionConfig`: habilitado, token, databaseId, mapeo de propiedades.
-- `portainerConfig`: URL, token, endpointId, stackId.
-- `healthchecks[]`: URL, metodo, intervalo, timeout, status esperado, retries.
-- `ingestToken`: token opcional para validar `POST /incidents`.
+2. **Set up environment variables**
+   ```bash
+   cp backend/.env.example backend/.env
+   cp frontend/.env.example frontend/.env
+   # Edit the files with your configuration
+   ```
 
-## API principal
+3. **Start all services with Docker Compose**
+   ```bash
+   docker-compose up
+   ```
 
-Base URL: `/api/v1`
+4. **Access the application**
+   - Frontend: http://localhost:5173
+   - Backend API: http://localhost:8080
+   - API Documentation: http://localhost:8080/docs
+   - MongoDB: mongodb://localhost:27017/control-panel
 
-- `GET /health`
-- `GET /projects`
-- `POST /projects`
-- `PATCH /projects/:id`
-- `GET /projects/:id/healthchecks/history`
-- `POST /projects/:id/test-email`
-- `POST /projects/:id/test-notion`
-- `POST /incidents`
-  - Header opcional: `x-project-token`
-- `GET /portainer/projects/:projectId/stacks/stats`
-- `POST /portainer/projects/:projectId/stacks/restart`
-- `POST /portainer/projects/:projectId/stacks/stop`
+5. **Login with default admin credentials**
+   - Email: `admin@example.com`
+   - Password: `admin123`
+   - **⚠️ Change these in production via environment variables!**
 
-### Ejemplo de incidente
+### Production Deployment
+
+1. **Create environment file**
+   ```bash
+   cp .env.production.example .env
+   # Edit .env with your production values
+   ```
+
+2. **Deploy with production compose**
+   ```bash
+   docker-compose -f docker-compose.production.yml up -d
+   ```
+
+3. **Or deploy to Portainer**
+   - Create new stack in Portainer
+   - Paste contents of `docker-compose.production.yml`
+   - Add environment variables
+   - Deploy
+
+## ⚙️ Configuration
+
+### Backend Environment Variables
+
+| Variable | Description | Default | Required |
+|----------|-------------|---------|----------|
+| `NODE_ENV` | Environment (development/production) | `development` | No |
+| `PORT` | Backend server port | `8080` | No |
+| `MONGODB_URI` | MongoDB connection string | `mongodb://mongo:27017/control-panel` | Yes |
+| `JWT_SECRET` | Secret key for JWT tokens (min 32 chars) | - | Yes |
+| `JWT_EXPIRES_IN` | JWT token expiration time | `24h` | No |
+| `ADMIN_EMAIL` | Initial admin user email | - | Yes |
+| `ADMIN_PASSWORD` | Initial admin user password | - | Yes |
+| `CORS_ORIGIN` | Allowed CORS origins (comma-separated) | `http://localhost:5173` | No |
+| `LOG_LEVEL` | Logging level (trace/debug/info/warn/error) | `info` | No |
+
+### Frontend Environment Variables
+
+| Variable | Description | Default | Required |
+|----------|-------------|---------|----------|
+| `VITE_API_URL` | Backend API base URL | `http://localhost:8080` | Yes |
+| `VITE_ENV` | Environment name | `development` | No |
+
+### Project Configuration (via UI)
+
+Each project can be configured with:
+
+1. **Email Settings**
+   - SMTP host, port, authentication
+   - From email address
+   - Developer email list
+   - Custom email templates with variables
+
+2. **Notion Integration**
+   - Integration token
+   - Database ID
+   - Property mappings (title, description, priority, etc.)
+
+3. **Health Checks**
+   - URL to monitor
+   - Check interval (1min, 5min, 15min, 30min, 1h, custom)
+   - Timeout duration
+   - Enable/disable per check
+
+4. **Portainer Integration**
+   - API endpoint URL
+   - API token
+   - Linked stack ID
+
+## 📡 API Usage
+
+### Failure Notification Webhook
+
+Send failure notifications from your services:
 
 ```bash
-curl -X POST http://localhost:8080/api/v1/incidents \
-  -H "Content-Type: application/json" \
-  -H "x-project-token: my-project-token" \
-  -d '{
-    "projectSlug": "billing-api",
-    "serviceName": "billing-worker",
-    "severity": "high",
-    "message": "Queue processing timeout",
-    "details": {"jobId": "a1b2c3"}
-  }'
+POST /api/notifications/failure
+Content-Type: application/json
+X-API-Key: your-project-api-key
+
+{
+  "serviceName": "payment-service",
+  "error": "Database connection timeout",
+  "timestamp": "2026-07-03T10:30:00Z",
+  "severity": "critical",
+  "metadata": {
+    "server": "prod-server-01",
+    "version": "1.2.3"
+  }
+}
 ```
 
-## Desarrollo local
+This will:
+1. Send emails to all configured developers
+2. Create a task in Notion (if configured)
+3. Log the notification attempt
 
-> Este entorno actual debe reconstruirse con el nuevo devcontainer para tener Node/npm disponibles.
+### Health Check Integration
 
-1. Rebuild del devcontainer.
-2. Instalar dependencias:
+Health checks run automatically based on configuration. Manual trigger:
 
 ```bash
-cd backend && npm install
-cd ../frontend && npm install
+POST /api/projects/:projectId/health-checks/:checkId/run
+Authorization: Bearer <jwt-token>
 ```
 
-1. Ejecutar backend:
+## 🧪 Testing
 
+### Backend Tests
 ```bash
-cd backend && npm run dev
+cd backend
+npm test              # Run tests
+npm run test:watch    # Watch mode
+npm run test:coverage # With coverage
 ```
 
-1. Ejecutar frontend:
-
+### Frontend Tests
 ```bash
-cd frontend && npm run dev
+cd frontend
+npm test              # Run tests
+npm run test:watch    # Watch mode
+npm run test:coverage # With coverage
 ```
 
-## Compose de despliegue (sin build)
-
-`compose.yaml` usa imagenes publicadas:
-
-- `ghcr.io/siryus-org/control-panel-backend:latest`
-- `ghcr.io/siryus-org/control-panel-frontend:latest`
-
-Despliegue:
-
+### Linting
 ```bash
-docker compose up -d
+# Backend
+cd backend && npm run lint
+
+# Frontend
+cd frontend && npm run lint
 ```
 
-## Compose local con Mongo
+## 🔧 Development
 
-`compose.dev.yaml` incluye `mongo:7` para desarrollo local.
+### Project Structure
 
-```bash
-docker compose -f compose.dev.yaml up -d
+```
+control-panel/
+├── backend/
+│   ├── src/
+│   │   ├── server.ts           # Fastify server setup
+│   │   ├── config/             # Configuration
+│   │   ├── models/             # Mongoose schemas
+│   │   ├── routes/             # API endpoints
+│   │   ├── services/           # Business logic
+│   │   ├── middleware/         # Auth, validation
+│   │   └── jobs/               # Scheduled tasks
+│   ├── test/                   # Test files
+│   └── package.json
+├── frontend/
+│   ├── src/
+│   │   ├── main.tsx            # App entry point
+│   │   ├── App.tsx             # Router setup
+│   │   ├── pages/              # Page components
+│   │   ├── components/         # Reusable components
+│   │   ├── contexts/           # React contexts
+│   │   ├── services/           # API clients
+│   │   └── hooks/              # Custom hooks
+│   ├── test/                   # Test files
+│   └── package.json
+├── docker-compose.yml          # Development setup
+├── docker-compose.production.yml # Production setup
+└── README.md
 ```
 
-## CI/CD
+### Adding New Features
 
-Workflows:
+1. **Backend**: Add routes in `backend/src/routes/`, services in `backend/src/services/`
+2. **Frontend**: Add pages in `frontend/src/pages/`, components in `frontend/src/components/`
+3. **Database**: Add models in `backend/src/models/`
+4. **Tests**: Add tests alongside implementation files
 
-- `test.yml`: lint + test + build para backend y frontend.
-- `docker-publish.yml`: build y push de imagenes a GHCR (backend y frontend).
-- `deploy.yml`: en push a `main`, ejecuta CI, publica imagenes y opcionalmente llama webhook de Portainer.
+## 🚀 CI/CD Pipeline
 
-Secrets recomendados:
+### GitHub Actions Workflows
 
-- `PORTAINER_DEPLOY_WEBHOOK` (opcional)
+1. **Test** (`.github/workflows/test.yml`)
+   - Runs on PR and push to main
+   - Executes lint, tests, and build for backend and frontend
+   - Requires all tests to pass
 
-## Seguridad y mejoras propuestas
+2. **Docker Publish** (`.github/workflows/docker-publish.yml`)
+   - Builds Docker images for backend and frontend
+   - Pushes to GitHub Container Registry (ghcr.io)
+   - Tags: `latest` and `sha-{commit}`
 
-Mejoras recomendadas para siguiente iteracion:
+3. **Deploy** (`.github/workflows/deploy.yml`)
+   - Triggers on push to main
+   - Runs tests → builds images → triggers Portainer webhook
+   - Automatic deployment to production
 
-- Cifrar credenciales SMTP/Notion/Portainer en base de datos.
-- Añadir autenticacion y RBAC en panel admin.
-- Rate limit en `POST /incidents`.
-- Cola de eventos para notificaciones (retries/backoff).
-- OpenTelemetry + trazas y metricas de healthchecks.
-- Dedupe avanzado de incidencias por ventana temporal.
+### Setting up GitHub Secrets
+
+Required secrets:
+- `PORTAINER_DEPLOY_WEBHOOK`: Webhook URL for Portainer stack update
+
+## 📚 API Documentation
+
+API documentation is available via Swagger UI:
+- Development: http://localhost:8080/docs
+- Production: https://your-domain.com/docs
+
+## 🔒 Security
+
+- JWT-based authentication with httpOnly cookies
+- CORS configuration for allowed origins
+- MongoDB connection authentication
+- Environment-based secrets (never commit `.env` files)
+- Rate limiting on notification endpoints
+- Input validation on all API endpoints
+
+## 🐛 Troubleshooting
+
+### MongoDB Connection Failed
+- Verify MongoDB is running: `docker ps | grep mongo`
+- Check connection string in `.env`
+- Ensure MongoDB health check passes
+
+### Backend Won't Start
+- Check logs: `docker logs control-panel-backend`
+- Verify all required env vars are set
+- Ensure MongoDB is healthy before backend starts
+
+### Frontend Can't Connect to Backend
+- Check `VITE_API_URL` in frontend `.env`
+- Verify backend is running: `curl http://localhost:8080/health`
+- Check CORS configuration in backend
+
+### Health Checks Not Running
+- Verify health check is enabled in project settings
+- Check backend logs for scheduler errors
+- Ensure URL is accessible from backend container
+
+### Emails Not Sending
+- Verify SMTP settings in project configuration
+- Check notification logs in database
+- Test SMTP credentials manually
+
+## 📝 Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/my-feature`
+3. Commit changes: `git commit -am 'Add my feature'`
+4. Push to branch: `git push origin feature/my-feature`
+5. Submit a Pull Request
+
+## 📄 License
+
+MIT License - see LICENSE file for details
+
+## 🙏 Acknowledgments
+
+- Fastify for high-performance backend
+- shadcn/ui for beautiful UI components
+- Notion API for task management integration
+- Portainer for Docker stack management
+
+---
+
+**Built with ❤️ for service reliability and monitoring**

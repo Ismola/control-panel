@@ -1,48 +1,63 @@
-import { useEffect, useState } from "react";
-import { fetchProjects } from "./api";
-import type { Project } from "./types";
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { Toaster } from './components/ui/toaster';
+import LoginPage from './pages/LoginPage';
+import DashboardLayout from './components/Layout/DashboardLayout';
+import DashboardPage from './pages/DashboardPage';
+import ProjectsPage from './pages/ProjectsPage';
+import ProjectDetailPage from './pages/ProjectDetailPage';
 
-function App() {
-    const [projects, setProjects] = useState<Project[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+    const { isAuthenticated, isLoading } = useAuth();
 
-    useEffect(() => {
-        void (async () => {
-            try {
-                const data = await fetchProjects();
-                setProjects(data);
-            } catch (err) {
-                const message = err instanceof Error ? err.message : "Unknown error";
-                setError(message);
-            } finally {
-                setLoading(false);
-            }
-        })();
-    }, []);
+    if (isLoading) {
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <div className="text-lg">Loading...</div>
+            </div>
+        );
+    }
+
+    if (!isAuthenticated) {
+        return <Navigate to="/login" replace />;
+    }
+
+    return <>{children}</>;
+}
+
+function AppRoutes() {
+    const { isAuthenticated } = useAuth();
 
     return (
-        <main className="layout">
-            <header>
-                <h1>Service Control Panel</h1>
-                <p>Administra proyectos, healthchecks, alertas y acciones de Portainer.</p>
-            </header>
+        <Routes>
+            <Route
+                path="/login"
+                element={isAuthenticated ? <Navigate to="/" replace /> : <LoginPage />}
+            />
+            <Route
+                path="/"
+                element={
+                    <ProtectedRoute>
+                        <DashboardLayout />
+                    </ProtectedRoute>
+                }
+            >
+                <Route index element={<DashboardPage />} />
+                <Route path="projects" element={<ProjectsPage />} />
+                <Route path="projects/:id" element={<ProjectDetailPage />} />
+            </Route>
+        </Routes>
+    );
+}
 
-            <section className="card">
-                <h2>Projects</h2>
-                {loading ? <p>Loading...</p> : null}
-                {error ? <p className="error">{error}</p> : null}
-                {!loading && !error ? (
-                    <ul>
-                        {projects.map((project) => (
-                            <li key={project._id}>
-                                <strong>{project.name}</strong> ({project.slug}) - {project.active ? "active" : "inactive"}
-                            </li>
-                        ))}
-                    </ul>
-                ) : null}
-            </section>
-        </main>
+function App() {
+    return (
+        <AuthProvider>
+            <BrowserRouter>
+                <AppRoutes />
+                <Toaster />
+            </BrowserRouter>
+        </AuthProvider>
     );
 }
 

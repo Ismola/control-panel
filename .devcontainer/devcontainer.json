@@ -1,21 +1,39 @@
 {
 	"name": "control-panel-dev",
-	"image": "mcr.microsoft.com/devcontainers/javascript-node:22-bullseye",
+	"dockerComposeFile": "../docker-compose.yml",
+	"service": "backend",
+	"workspaceFolder": "/workspaces/control-panel",
 	"features": {
 		"ghcr.io/devcontainers/features/docker-in-docker:2": {
 			"version": "latest",
 			"enableNonRootDocker": "true",
 			"moby": "true"
 		},
-		"ghcr.io/devcontainers/features/github-cli:1": {}
+		"ghcr.io/devcontainers/features/github-cli:1": {},
+		"ghcr.io/devcontainers/features/node:1": {
+			"version": "22"
+		}
 	},
 	"forwardPorts": [
-		3000,
 		5173,
 		8080,
 		27017
 	],
-	"postCreateCommand": "npm --version && node --version",
+	"portsAttributes": {
+		"5173": {
+			"label": "Frontend",
+			"onAutoForward": "notify"
+		},
+		"8080": {
+			"label": "Backend API",
+			"onAutoForward": "notify"
+		},
+		"27017": {
+			"label": "MongoDB",
+			"onAutoForward": "silent"
+		}
+	},
+	"postCreateCommand": "cd /workspaces/control-panel/backend && npm install && cd /workspaces/control-panel/frontend && npm install",
 	"customizations": {
 		"vscode": {
 			"extensions": [
@@ -24,8 +42,17 @@
 				"mongodb.mongodb-vscode",
 				"ms-azuretools.vscode-docker",
 				"vitest.explorer",
+				"bradlc.vscode-tailwindcss",
 				"ismola.ismola-extension-pack"
-			]
+			],
+			"settings": {
+				"editor.formatOnSave": true,
+				"editor.defaultFormatter": "esbenp.prettier-vscode",
+				"editor.codeActionsOnSave": {
+					"source.fixAll.eslint": "explicit"
+				}
+			}
 		}
-	}
+	},
+	"remoteUser": "node"
 }

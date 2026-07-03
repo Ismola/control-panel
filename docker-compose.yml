@@ -1,0 +1,70 @@
+services:
+  mongo:
+    image: mongo:7
+    container_name: control-panel-mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_DATABASE: control-panel
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/control-panel --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+    networks:
+      - control-panel-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: production
+    container_name: control-panel-backend
+    restart: unless-stopped
+    depends_on:
+      mongo:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 8080
+      HOST: 0.0.0.0
+      MONGODB_URI: mongodb://mongo:27017/control-panel
+      JWT_SECRET: dev-secret-key-change-in-production-minimum-32-characters
+      JWT_EXPIRES_IN: 24h
+      ADMIN_EMAIL: admin@example.com
+      ADMIN_PASSWORD: admin123
+      CORS_ORIGIN: http://localhost:5173,http://localhost:3000
+      LOG_LEVEL: info
+    ports:
+      - "8080:8080"
+    networks:
+      - control-panel-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: production
+    container_name: control-panel-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      VITE_API_URL: http://localhost:8080
+      VITE_ENV: production
+    ports:
+      - "5173:80"
+    networks:
+      - control-panel-network
+
+volumes:
+  mongo-data:
+    driver: local
+
+networks:
+  control-panel-network:
+    driver: bridge

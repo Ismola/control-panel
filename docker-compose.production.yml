@@ -1,0 +1,59 @@
+services:
+  mongo:
+    image: mongo:7
+    container_name: control-panel-mongo-prod
+    restart: always
+    environment:
+      MONGO_INITDB_DATABASE: control-panel
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/control-panel --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+    networks:
+      - control-panel-network
+
+  backend:
+    image: ghcr.io/ismola/control-panel-backend:latest
+    container_name: control-panel-backend-prod
+    restart: always
+    depends_on:
+      mongo:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 8080
+      HOST: 0.0.0.0
+      MONGODB_URI: ${MONGODB_URI:-mongodb://mongo:27017/control-panel}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-24h}
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      CORS_ORIGIN: ${CORS_ORIGIN}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    ports:
+      - "8080:8080"
+    networks:
+      - control-panel-network
+
+  frontend:
+    image: ghcr.io/ismola/control-panel-frontend:latest
+    container_name: control-panel-frontend-prod
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+    networks:
+      - control-panel-network
+
+volumes:
+  mongo-data:
+    driver: local
+
+networks:
+  control-panel-network:
+    driver: bridge

@@ -1,56 +1,102 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Document, Schema } from 'mongoose';
 
-const healthcheckSchema = new Schema(
-    {
-        name: { type: String, required: true },
-        url: { type: String, required: true },
-        method: { type: String, default: "GET" },
-        intervalSeconds: { type: Number, default: 60 },
-        timeoutMs: { type: Number, default: 3000 },
-        expectedStatus: { type: Number, default: 200 },
-        retries: { type: Number, default: 1 },
-        enabled: { type: Boolean, default: true }
-    },
-    { _id: true }
-);
+export interface IEmailConfig {
+    smtp: {
+        host: string;
+        port: number;
+        secure: boolean;
+        auth: {
+            user: string;
+            pass: string;
+        };
+    };
+    from: string;
+    developers: string[];
+}
 
-const projectSchema = new Schema(
+export interface INotionConfig {
+    enabled: boolean;
+    integrationToken?: string;
+    databaseId?: string;
+    propertyMappings?: {
+        title?: string;
+        description?: string;
+        priority?: string;
+        status?: string;
+        [key: string]: string | undefined;
+    };
+}
+
+export interface IPortainerConfig {
+    enabled: boolean;
+    apiUrl?: string;
+    apiToken?: string;
+    stackId?: string;
+}
+
+export interface IProject extends Document {
+    name: string;
+    description: string;
+    apiKey: string;
+    emailConfig?: IEmailConfig;
+    notionConfig?: INotionConfig;
+    portainerConfig?: IPortainerConfig;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+const projectSchema = new Schema<IProject>(
     {
-        name: { type: String, required: true },
-        slug: { type: String, required: true, unique: true },
-        active: { type: Boolean, default: true },
-        ingestToken: { type: String },
+        name: {
+            type: String,
+            required: true,
+            trim: true,
+        },
+        description: {
+            type: String,
+            default: '',
+        },
+        apiKey: {
+            type: String,
+            required: true,
+            unique: true,
+            index: true,
+        },
         emailConfig: {
-            enabled: { type: Boolean, default: false },
-            smtpHost: { type: String },
-            smtpPort: { type: Number, default: 587 },
-            secure: { type: Boolean, default: false },
-            smtpUser: { type: String },
-            smtpPass: { type: String },
-            fromEmail: { type: String },
-            recipients: [{ type: String }],
-            subjectTemplate: { type: String, default: "[{{project}}] Incidente {{severity}}" },
-            bodyTemplate: {
-                type: String,
-                default: "Servicio: {{serviceName}}\nMensaje: {{message}}\nSeveridad: {{severity}}"
-            }
+            smtp: {
+                host: String,
+                port: Number,
+                secure: Boolean,
+                auth: {
+                    user: String,
+                    pass: String,
+                },
+            },
+            from: String,
+            developers: [String],
         },
         notionConfig: {
-            enabled: { type: Boolean, default: false },
-            token: { type: String },
-            databaseId: { type: String },
-            propertyMapping: { type: Schema.Types.Mixed, default: {} }
+            enabled: {
+                type: Boolean,
+                default: false,
+            },
+            integrationToken: String,
+            databaseId: String,
+            propertyMappings: Schema.Types.Mixed,
         },
         portainerConfig: {
-            enabled: { type: Boolean, default: false },
-            baseUrl: { type: String },
-            endpointId: { type: Number },
-            stackId: { type: Number },
-            token: { type: String }
+            enabled: {
+                type: Boolean,
+                default: false,
+            },
+            apiUrl: String,
+            apiToken: String,
+            stackId: String,
         },
-        healthchecks: [healthcheckSchema]
     },
-    { timestamps: true }
+    {
+        timestamps: true,
+    }
 );
 
-export const Project = mongoose.model("Project", projectSchema);
+export const Project = mongoose.model<IProject>('Project', projectSchema);
