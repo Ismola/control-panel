@@ -1,0 +1,31 @@
+{
+	"name": "control-panel-dev",
+	"image": "mcr.microsoft.com/devcontainers/javascript-node:22-bullseye",
+	"features": {
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {
+			"version": "latest",
+			"enableNonRootDocker": "true",
+			"moby": "true"
+		},
+		"ghcr.io/devcontainers/features/github-cli:1": {}
+	},
+	"forwardPorts": [
+		3000,
+		5173,
+		8080,
+		27017
+	],
+	"postCreateCommand": "npm --version && node --version",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"dbaeumer.vscode-eslint",
+				"esbenp.prettier-vscode",
+				"mongodb.mongodb-vscode",
+				"ms-azuretools.vscode-docker",
+				"vitest.explorer",
+				"ismola.ismola-extension-pack"
+			]
+		}
+	}
+}

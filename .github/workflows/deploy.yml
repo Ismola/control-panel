@@ -1,0 +1,25 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  ci:
+    uses: ./.github/workflows/test.yml
+
+  docker-publish:
+    needs: ci
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/docker-publish.yml
+
+  notify-portainer:
+    needs: [ci, docker-publish]
+    runs-on: ubuntu-latest
+    if: ${{ success() && secrets.PORTAINER_DEPLOY_WEBHOOK != '' }}
+    steps:
+      - name: Trigger Portainer webhook
+        run: curl -f -X POST "${{ secrets.PORTAINER_DEPLOY_WEBHOOK }}"

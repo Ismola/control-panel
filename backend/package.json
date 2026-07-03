@@ -1,0 +1,39 @@
+{
+    "name": "control-panel-backend",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "main": "dist/server.js",
+    "scripts": {
+        "dev": "tsx watch src/server.ts",
+        "build": "tsc -p tsconfig.json",
+        "start": "node dist/server.js",
+        "lint": "eslint src --ext .ts",
+        "test": "vitest run"
+    },
+    "dependencies": {
+        "@notionhq/client": "^2.3.0",
+        "axios": "^1.11.0",
+        "cors": "^2.8.5",
+        "dotenv": "^16.6.1",
+        "express": "^4.21.2",
+        "helmet": "^8.1.0",
+        "mongoose": "^8.18.0",
+        "morgan": "^1.10.0",
+        "nodemailer": "^7.0.5",
+        "zod": "^4.1.5"
+    },
+    "devDependencies": {
+        "@types/cors": "^2.8.19",
+        "@types/express": "^5.0.3",
+        "@types/morgan": "^1.9.10",
+        "@types/nodemailer": "^6.4.17",
+        "@types/node": "^24.3.0",
+        "@typescript-eslint/eslint-plugin": "^8.41.0",
+        "@typescript-eslint/parser": "^8.41.0",
+        "eslint": "^8.57.1",
+        "tsx": "^4.20.5",
+        "typescript": "^5.9.2",
+        "vitest": "^3.2.4"
+    }
+}
